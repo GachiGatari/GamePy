@@ -1,7 +1,7 @@
 from  classes import Enemy,Seller,Player
 import random
 Seller = Seller()
-Player = Player(100,10,2)
+Player = Player(100, 10, 2)
 
 
 def increase_attack():
@@ -18,19 +18,20 @@ def add_potion():
       global Player
       Player.potion += 1
 
+
 def get_loot():
       global Player
-      gold_loot = random.randint(0,100)
+      gold_loot = random.randint(0, 100)
       Player.money += gold_loot
       print(f"Обыскивая труп врага ты находишь {gold_loot} золота")
-      if random.randint(0,100) > 66:
-            add_attack = random.randint(1,4)
+      if random.randint(0, 100) > 66:
+            add_attack = random.randint(1, 4)
             Player.attack += add_attack
             print(f"Ого,да тебе повезло,помимо золота ты увеличиваешь свой урон на {add_attack}")
 
-def fight(Enemy):
+def fight(Enemy,hp_plus):
       global Player
-      Enemy = Enemy(100,5,0)
+      Enemy = Enemy(100+hp_plus, 5, 0)
       print("Перед вами стоит варвар\n"
             "У него в руках огромная дубина и он размахивает ей,очевидно зазывая вас на поединок\n"
             "Вы решаете испытать свои судьбу и попиздиться")
@@ -42,6 +43,10 @@ def fight(Enemy):
             if not action.isdigit():
                   print("Даун,введи команду из списка...")
                   continue
+            if int(action) != 1 and int(action) != 2:
+                  print("Всё хуйня, давай по новой")
+                  continue
+
             if int(action) == 1:
                   damage = round(Player.attack * random.uniform(0, 2)) - Enemy.armor
                   if damage < 0:
@@ -82,6 +87,9 @@ def break_down():
             print(f"У тебя к слову {Player.potion} хилки и {Player.health} здоровья")
             try:
                   action = int(input())
+                  if action != 1 and action != 2:
+                        print("Всё хуйня, давай по новой")
+                        continue
             except:
                   print("Это не команда...")
                   continue
@@ -163,16 +171,18 @@ print("Вы странствующий воитель.\n"
       "Сегодня ваше путешествие начинается с входа в дремучий лес\n"
       "Перед вами бесконечное кол-во врагов, а через каждые 2 врага есть лавка с полезными предметами\n"
       "Ну что? Погнали!")
+i=0
 while True:
-      win = fight(Enemy)
+      win = fight(Enemy,i)
       if not win:
             break
       get_loot()
       break_down()
-      win = fight(Enemy)
+      win = fight(Enemy,i)
       if not win:
             break
       get_loot()
       lavka()
+      i+=10
 
 
